@@ -4,6 +4,7 @@ import common.Person;
 import common.PersonService;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /*
 Задача 1
@@ -21,16 +22,18 @@ public class Task1 {
   }
 
   public List<Person> findOrderedPersons(List<Integer> personIds) {
-    return personService
-        .findPersons(personIds)
+    var idToPerson = personService.findPersons(personIds)
         .stream()
-        .sorted(Comparator.comparing(elem -> personIds.indexOf(elem.id())))
+        .collect(Collectors.toMap(Person::id, person -> person));
+
+    return personIds
+        .stream()
+        .map(idToPerson::get)
         .toList();
 
     /*
      * оценка асимптотики работы:
-     * время работы: в худшем случае O(n) из-за indexOf, в лучшем O(log n) (сортировка) (операции stream и toList работают за O(1)
-     * эта оценка без учета времени сервиса, тк его реализация неизвестна
+     * теперь временная сложность будет: построить мапу (O(n)) + пройтись по personIds (O(n)) => O(n)
      * */
   }
 }

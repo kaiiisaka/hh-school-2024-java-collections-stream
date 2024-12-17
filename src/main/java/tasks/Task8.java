@@ -6,6 +6,7 @@ import common.PersonWithResumes;
 import common.Resume;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -29,7 +30,7 @@ public class Task8 {
   public Set<PersonWithResumes> enrichPersonsWithResumes(Collection<Person> persons) {
     //мапа соотносящая id персоны и список резюме для этой персоны
     //используется чтобы быстро и удобно получать список резюме при знании id
-    var personIdToResumes = personService.findResumes(persons.stream().map(Person::id).collect(toSet()))
+    Map<Integer, Set<Resume>> personIdToResumes = personService.findResumes(persons.stream().map(Person::id).collect(toSet()))
         .stream()
         .collect(Collectors.groupingBy(Resume::personId, toSet()));
 
